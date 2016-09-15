@@ -19,12 +19,28 @@ func ScreenRect() (image.Rectangle, error) {
 	return image.Rect(0, 0, x, y), nil
 }
 
-func CaptureScreen() (*image.RGBA, error) {
+func CaptureScreen(filename string) error {
 	r, e := ScreenRect()
 	if e != nil {
-		return nil, e
+		return e
 	}
-	return CaptureRect(r)
+
+	f, err := os.Create(filename)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+
+	img, err := CaptureRect(r)
+	if err != nil {
+		return err
+	}
+
+	err = png.Encode(f, img)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func CaptureRect(rect image.Rectangle) (*image.RGBA, error) {
