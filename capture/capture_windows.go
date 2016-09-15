@@ -6,6 +6,9 @@ import (
 	"reflect"
 	"syscall"
 	"unsafe"
+	"image/png"
+	"os"
+
 )
 
 func ScreenRect() (image.Rectangle, error) {
